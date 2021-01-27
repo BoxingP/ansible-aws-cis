@@ -1,0 +1,34 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "sns:ConfirmSubscription",
+        "sns:CreateTopic",
+        "sns:DeleteTopic",
+        "sns:SetTopicAttributes",
+        "sns:Subscribe",
+        "sns:Unsubscribe"
+      ],
+      "Resource": [
+        "arn:aws-cn:sns:*:*:cloudtrail-sns-infosec"
+      ],
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "cloudtrail:StartLogging",
+        "cloudtrail:CreateTrail",
+        "cloudtrail:DeleteTrail",
+        "cloudtrail:GetTrailStatus",
+        "cloudtrail:RemoveTags",
+        "cloudtrail:StopLogging",
+        "cloudtrail:UpdateTrail"
+      ],
+      "Resource": [
+        "arn:aws-cn:cloudtrail:*:027645256331:trail/*"
+      ],
+      "Effect": "Allow"
+    }
+  ]
+}

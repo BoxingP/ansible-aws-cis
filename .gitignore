@@ -1,1 +1,4 @@
 .idea/
+.vault_pass
+/vars/aws_credentials.yaml
+**/vault

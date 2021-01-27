@@ -1,0 +1,11 @@
+iam_deep_security_user_name: InfoSec-TM-DeepSecurity
+iam_deep_security_policy_name: InfoSec-TM-DeepSecurity
+iam_deep_security_policy_template: vars/iam_deep_security_policy.json
+iam_cloudtrail_policy_name: InfoSec-CloudTrail
+iam_cloudtrail_policy_template: vars/iam_cloudtrail_policy.json
+iam_saml_policy_name: InfoSec-SAML
+iam_saml_policy_template: vars/iam_saml_policy.json
+iam_rw_role_name: InfoSec-RW
+iam_rw_role_trust_relationship_template: vars/iam_rw_role_trust_relationship.json
+iam_ec2ssm_role_name: EC2SSMRole
+iam_ec2ssm_role_trust_relationship_template: vars/iam_ec2ssm_role_trust_relationship.json

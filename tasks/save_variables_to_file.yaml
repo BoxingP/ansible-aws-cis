@@ -1,0 +1,14 @@
+- name: init json file
+  copy:
+    content: "{}"
+    dest: '{{ iam_deep_security_user_name }}_credentials.json'
+    force: yes
+
+- name: append more key/values
+  set_fact:
+    variables: "{{ '{}'|from_json | default([]) | combine({ 'AWS-Account-ID': dscops.account_id, 'IAM-Deep-Security-User-Name': iam_deep_security_user_name, 'IAM-User-Access-Key-ID': created_user_access_key_id, 'IAM-User-Secret-Access-Key': created_user_secret_access_key }) }}"
+
+- name: save values to file
+  copy:
+    content: "{{ variables | to_nice_json }}"
+    dest: '{{ iam_deep_security_user_name }}_credentials.json'

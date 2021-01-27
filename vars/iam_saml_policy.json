@@ -1,0 +1,26 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1457386718828",
+      "Action": [
+        "iam:CreateSAMLProvider",
+        "iam:DeleteSAMLProvider",
+        "iam:UpdateSAMLProvider"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws-cn:iam::*:saml-provider/*"
+    },
+    {
+      "Sid": "Stmt1457387373017",
+      "Action": [
+        "iam:AttachRolePolicy",
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:DetachRolePolicy"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws-cn:iam::*:role/*"
+    }
+  ]
+}

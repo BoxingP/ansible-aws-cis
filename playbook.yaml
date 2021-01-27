@@ -1,0 +1,31 @@
+- name: normalize AWS account as CIS asked
+  hosts: localhost
+  gather_facts: yes
+  vars:
+    email_address: creator@example.com
+    virtualenv: '{{ hostvars[inventory_hostname].ansible_env.HOME }}/.virtualenvs/ansible-aws-cis-env'
+  vars_files:
+    - vars/aws_credentials.yaml
+    - vars/iam_name_convention.yaml
+  tasks:
+    - name: init server environment
+      block:
+        - include_role:
+            name: 'update_{{ ansible_distribution|lower }}_environment'
+        - include_role:
+            name: create_python_virtualenv
+    - name: build aws environment
+      block:
+        - name: load aws tags needed to add when creating resources
+          include_vars:
+            file: vars/aws_resource_tags.yaml
+            name: aws_resource_tags
+        - include_tasks: tasks/create_required_iam.yaml
+      vars:
+        ansible_python_interpreter: '{{ virtualenv }}/bin/python3'
+      environment:
+        AWS_ACCESS_KEY_ID: '{{ dscops.aws_access_key_id }}'
+        AWS_SECRET_ACCESS_KEY: '{{ dscops.aws_secret_access_key }}'
+        PATH: '{{ virtualenv }}/bin:{{ hostvars[inventory_hostname].ansible_env.PATH }}'
+    - name: save results
+      include_tasks: tasks/save_variables_to_file.yaml
