@@ -27,13 +27,13 @@
     policy_name: '{{ iam_deep_security_policy_name }}'
     state: present
     skip_duplicates: true
-    policy_json: "{{ lookup('file', iam_deep_security_policy_template) }}"
+    policy_json: "{{ lookup('file', iam_deep_security_policy_file) }}"
 
 - name: create iam managed cloudtrail policy
   community.aws.iam_managed_policy:
     region: cn-north-1
     policy_name: '{{ iam_cloudtrail_policy_name }}'
-    policy: "{{ lookup('file', iam_cloudtrail_policy_template) }}"
+    policy: "{{ lookup('file', iam_cloudtrail_policy_file) }}"
     policy_description: 'IAM policy used for CIS Bootstrap process'
     only_version: true
     state: present
@@ -42,21 +42,27 @@
   community.aws.iam_managed_policy:
     region: cn-north-1
     policy_name: '{{ iam_saml_policy_name }}'
-    policy: "{{ lookup('file', iam_saml_policy_template) }}"
+    policy: "{{ lookup('file', iam_saml_policy_file) }}"
     policy_description: 'IAM policy used for CIS Bootstrap process'
     only_version: true
     state: present
+
+- name: generate iam policy file
+  template:
+    src: iam_rw_role_trust_relationship.j2
+    dest: '{{ iam_rw_role_trust_relationship_file }}'
+    force: yes
 
 - name: create iam rw role
   community.aws.iam_role:
     region: cn-north-1
     name: '{{ iam_rw_role_name }}'
     description: 'IAM role used for CIS'
-    assume_role_policy_document: "{{ lookup('file', iam_rw_role_trust_relationship_template ) }}"
+    assume_role_policy_document: "{{ lookup('file', iam_rw_role_trust_relationship_file ) }}"
     purge_policies: true
     managed_policies:
-      - 'arn:aws-cn:iam::{{ dscops.account_id }}:policy/{{ iam_cloudtrail_policy_name }}'
-      - 'arn:aws-cn:iam::{{ dscops.account_id }}:policy/{{ iam_saml_policy_name }}'
+      - 'arn:aws-cn:iam::{{ target.account_id }}:policy/{{ iam_cloudtrail_policy_name }}'
+      - 'arn:aws-cn:iam::{{ target.account_id }}:policy/{{ iam_saml_policy_name }}'
       - arn:aws-cn:iam::aws:policy/ReadOnlyAccess
       - arn:aws-cn:iam::aws:policy/IAMFullAccess
     tags:
@@ -67,7 +73,7 @@
     region: cn-north-1
     name: '{{ iam_ec2ssm_role_name }}'
     description: 'IAM role used for CIS'
-    assume_role_policy_document: "{{ lookup('file', iam_ec2ssm_role_trust_relationship_template ) }}"
+    assume_role_policy_document: "{{ lookup('file', iam_ec2ssm_role_trust_relationship_file ) }}"
     purge_policies: true
     managed_policies:
       - arn:aws-cn:iam::aws:policy/service-role/AmazonEC2RoleforSSM

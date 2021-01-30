@@ -6,7 +6,7 @@
 
 - name: append more key/values
   set_fact:
-    variables: "{{ '{}'|from_json | default([]) | combine({ 'AWS-Account-ID': dscops.account_id, 'IAM-Deep-Security-User-Name': iam_deep_security_user_name, 'IAM-User-Access-Key-ID': created_user_access_key_id, 'IAM-User-Secret-Access-Key': created_user_secret_access_key }) }}"
+    variables: "{{ '{}'|from_json | default([]) | combine({ 'AWS-Account-ID': target.account_id, 'IAM-Deep-Security-User-Name': iam_deep_security_user_name, 'IAM-User-Access-Key-ID': created_user_access_key_id, 'IAM-User-Secret-Access-Key': created_user_secret_access_key }) }}"
 
 - name: save values to file
   copy:

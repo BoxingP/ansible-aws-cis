@@ -24,8 +24,8 @@
       vars:
         ansible_python_interpreter: '{{ virtualenv }}/bin/python3'
       environment:
-        AWS_ACCESS_KEY_ID: '{{ dscops.aws_access_key_id }}'
-        AWS_SECRET_ACCESS_KEY: '{{ dscops.aws_secret_access_key }}'
+        AWS_ACCESS_KEY_ID: '{{ target.aws_access_key_id }}'
+        AWS_SECRET_ACCESS_KEY: '{{ target.aws_secret_access_key }}'
         PATH: '{{ virtualenv }}/bin:{{ hostvars[inventory_hostname].ansible_env.PATH }}'
     - name: save results
       include_tasks: tasks/save_variables_to_file.yaml
