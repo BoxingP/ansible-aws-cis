@@ -14,7 +14,7 @@
             name: 'update_{{ ansible_distribution|lower }}_environment'
         - include_role:
             name: create_python_virtualenv
-    - name: build aws environment
+    - name: build aws iam
       block:
         - name: load aws tags needed to add when creating resources
           include_vars:
@@ -29,3 +29,16 @@
         PATH: '{{ virtualenv }}/bin:{{ hostvars[inventory_hostname].ansible_env.PATH }}'
     - name: save results
       include_tasks: tasks/save_variables_to_file.yaml
+    - name: copy ami to aws
+      block:
+        - name: load aws images
+          include_vars:
+            file: vars/aws_instance_images.yaml
+            name: aws_instance_images
+        - include_tasks: tasks/copy_ami_to_aws.yaml
+      vars:
+        ansible_python_interpreter: '{{ virtualenv }}/bin/python3'
+      environment:
+        AWS_ACCESS_KEY_ID: '{{ dscops.aws_access_key_id }}'
+        AWS_SECRET_ACCESS_KEY: '{{ dscops.aws_secret_access_key }}'
+        PATH: '{{ virtualenv }}/bin:{{ hostvars[inventory_hostname].ansible_env.PATH }}'

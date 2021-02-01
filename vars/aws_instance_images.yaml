@@ -1,0 +1,13 @@
+aws_images:
+  - aws_image_region: cn-north-1
+    aws_image_id:
+      - ami-0625420bc83a8f6bc
+      - ami-0f11e93ea25d13ba1
+      - ami-041786fce7476451a
+      - ami-0725eed9eaffaebcf
+  - aws_image_region: cn-northwest-1
+    aws_image_id:
+      - ami-0479e75eb048dacad
+      - ami-065c033964574ef01
+      - ami-01181b78ed5a6630f
+      - ami-0be001459424a808c

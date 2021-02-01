@@ -1,0 +1,31 @@
+- name: get ami info
+  amazon.aws.ec2_ami_info:
+    region: '{{ item.0.aws_image_region }}'
+    describe_image_attributes: yes
+    image_ids:
+      '{{ item.1 }}'
+  loop:
+    "{{ aws_instance_images.aws_images|subelements('aws_image_id') }}"
+  register: configurations
+
+- name: get ami launch permissions info
+  set_fact:
+    { "{{ item.images[0].image_id | replace('-','_') }}_launch_permissions_list": "{{ item.images[0].launch_permissions | map(attribute='user_id') | list }}" }
+  loop:
+    '{{ configurations.results }}'
+
+- name: update ami launch permissions info
+  set_fact:
+    { "{{ item.1 | replace('-','_') }}_launch_permissions_list": "{{ vars[item.1|replace('-','_') + '_launch_permissions_list'] | union([target.account_id|string]) }}" }
+  loop:
+    "{{ aws_instance_images.aws_images|subelements('aws_image_id') }}"
+
+- name: copy ami to aws
+  amazon.aws.ec2_ami:
+    region: '{{ item.0.aws_image_region }}'
+    image_id: '{{ item.1 }}'
+    state: present
+    launch_permissions:
+      user_ids: "{{ vars[item.1|replace('-','_') + '_launch_permissions_list'] }}"
+  loop:
+    "{{ aws_instance_images.aws_images|subelements('aws_image_id') }}"
